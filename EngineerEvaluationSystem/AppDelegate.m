@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "LoginViewController.h"
 
 @interface AppDelegate ()
 
@@ -17,9 +18,33 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    UIStoryboard *mainStoryboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    LoginViewController *loginVCTL = [mainStoryboard instantiateViewControllerWithIdentifier:@"LoginVC"];
+    UINavigationController *rootCtrl = [[UINavigationController alloc] initWithRootViewController:loginVCTL];
+    self.window.rootViewController = rootCtrl;
     return YES;
 }
 
+-(void)changeRootCtroller:(BOOL)isLogin
+{
+    //    [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:250.0f/255.0f green:210.0f/255.0f blue:40.0f/255.0f alpha:1.0f]];
+    UIViewController *rootVCT = nil;
+    UIStoryboard *storyBoard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    self.window.rootViewController = [storyBoard instantiateInitialViewController];
+    rootVCT = [storyBoard instantiateInitialViewController];
+    
+    [UIView transitionWithView:[[UIApplication sharedApplication].delegate window]
+                      duration:1
+                       options:UIViewAnimationOptionTransitionFlipFromLeft
+                    animations:^{
+                        BOOL oldState=[UIView areAnimationsEnabled];
+                        [UIView setAnimationsEnabled:NO];
+                        [[[UIApplication sharedApplication].delegate window] setRootViewController:rootVCT];
+                        [UIView setAnimationsEnabled:oldState];
+                        
+                    }
+                    completion:NULL];
+}
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
